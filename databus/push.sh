@@ -1,24 +1,17 @@
 #!/bin/bash
 
-cd "$( dirname "${BASH_SOURCE[0]}" )"
-cd ./webids
-
-
+#cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 #prepare directories for calculated files
-DATE=$(date +%y-%m-%d)
-GROUPDIR=$(pwd)
-VERSIONDIR=$(pwd)/uniformedWebids/$DATE
-mkdir $VERSIONDIR
-mvn versions:set -DnewVersion=$DATE
-
-#run crawl and uniform process
-cd "$( dirname "${BASH_SOURCE[0]}" )/../"
-set -e
-mvn scala:run -e -Dlauncher="walloffame" -DaddArgs="$VERSIONDIR/uniformedWebids_webids.ttl"
+#DATE=$(date +%y-%m-%d)
+#DIR=$(pwd)/uniformedWebIds/
+#VERSIONDIR=$(pwd)/uniformedWebids/$DATE
+cd ../
+mvn spring-boot:run -Dstart-class=org.dbpedia.walloffame.DatabusApplication -Dspring-boot.run.arguments=databus/uniformedWebIds/$(date +%y-%m-%d)
 
 #push data to DBpedia Databus
-cd $GROUPDIR
+cd databus/uniformedWebIds/
+mvn versions:set -DnewVersion=$(date +%y-%m-%d)
 mvn prepare-package 
 mvn databus:package-export
 mvn databus:deploy

@@ -20,3 +20,7 @@ Per default the webapp is accessible at port 8080. You can start browsing at:
 Get all WebIds of Wall of Fame:
 
     mvn spring-boot:run -Dstart-class=org.dbpedia.walloffame.DatabusApplication
+
+Push WebIds of WallOfFame to DBpedia Databus:
+
+    mvn spring-boot:run -Dstart-class=org.dbpedia.walloffame.DatabusApplication -Dspring-boot.run.arguments=databus/uniformedWebIds/$(date +%y-%m-%d) && cd databus/uniformedWebIds/ && mvn versions:set -DnewVersion=$(date +%y-%m-%d) && mvn prepare-package && mvn databus:package-export && mvn databus:deploy

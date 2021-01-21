@@ -2,7 +2,7 @@ package org.dbpedia.walloffame
 
 import org.dbpedia.walloffame.spring.controller
 import org.dbpedia.walloffame.spring.controller.{ValidationController, WoFController}
-import org.springframework.boot.SpringApplication
+import org.springframework.boot.{SpringApplication, WebApplicationType}
 import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -22,7 +22,9 @@ import java.util.regex.Pattern
 class DatabusApplication extends SpringBootServletInitializer {
   @Override
   protected override def configure(application: SpringApplicationBuilder): SpringApplicationBuilder = {
+
     application.sources(DatabusApplication.getClass)
+    application.web(WebApplicationType.NONE)
   }
 }
 

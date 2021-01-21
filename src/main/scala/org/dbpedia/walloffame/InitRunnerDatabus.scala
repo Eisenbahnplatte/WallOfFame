@@ -22,8 +22,11 @@ class InitRunnerDatabus extends CommandLineRunner {
 
   override def run(args: String*): Unit = {
 
-    val targetDir = File(config.databus.file)
-
+    //    println(config.databus.file)
+    //    val targetDir = File(config.databus.file)
+    println(args.head)
+    val targetDir = File(args.head)
+    targetDir.createDirectoryIfNotExists()
     getWebIdsFromWallOfFame(targetDir)
   }
 
