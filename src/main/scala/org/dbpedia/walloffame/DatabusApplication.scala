@@ -3,6 +3,7 @@ package org.dbpedia.walloffame
 import org.dbpedia.walloffame.spring.controller
 import org.dbpedia.walloffame.spring.controller.{ValidationController, WoFController}
 import org.springframework.boot.{SpringApplication, WebApplicationType}
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -12,19 +13,20 @@ import org.springframework.core.`type`.filter.RegexPatternTypeFilter
 import java.util.regex.Pattern
 
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = Array(classOf[WebMvcAutoConfiguration]))
 @ComponentScan(
   basePackages = Array("org.dbpedia.walloffame"),
   useDefaultFilters = false,
   includeFilters = Array(new ComponentScan.Filter(`type` = FilterType.REGEX, pattern = Array("org.dbpedia.walloffame.Config", "org.dbpedia.walloffame.InitRunnerDatabus")))
   //  excludeFilters = Array(new ComponentScan.Filter(`type` = FilterType.REGEX, pattern = Array("org.dbpedia.walloffame.spring.controller.*", "org.dbpedia.walloffame.InitRunner")))
 )
+//@Configuration
+//@EnableAutoConfiguration(exclude = Array(classOf[WebMvcAutoConfiguration]))
+//@ComponentScan(excludeFilters = Array(new ComponentScan.Filter(`type`=FilterType.ANNOTATION,value=Array(classOf[InitRunner]))))
 class DatabusApplication extends SpringBootServletInitializer {
   @Override
   protected override def configure(application: SpringApplicationBuilder): SpringApplicationBuilder = {
-
-    application.sources(DatabusApplication.getClass)
-    application.web(WebApplicationType.NONE)
+    application.sources(DatabusApplication.getClass).web(WebApplicationType.NONE)
   }
 }
 

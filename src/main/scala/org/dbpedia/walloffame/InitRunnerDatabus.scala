@@ -1,6 +1,7 @@
 package org.dbpedia.walloffame
 
 import better.files.File
+import org.apache.commons.compress.compressors.{CompressorOutputStream, CompressorStreamFactory}
 import org.apache.jena.rdf.model.{Model, ModelFactory}
 import org.apache.jena.riot.{Lang, RDFDataMgr}
 import org.apache.jena.shared.PrefixMapping
@@ -24,14 +25,17 @@ class InitRunnerDatabus extends CommandLineRunner {
 
     //    println(config.databus.file)
     //    val targetDir = File(config.databus.file)
-    println(args.head)
+    if (args.isEmpty) {
+      println("Please set the target directory, where the WebId files need to be written to.")
+      return 1
+    }
+
     val targetDir = File(args.head)
     targetDir.createDirectoryIfNotExists()
     getWebIdsFromWallOfFame(targetDir)
   }
 
   def getWebIdsFromWallOfFame(targetDir: File) = {
-
 
     val aggregatedModel = ModelFactory.createDefaultModel()
     val webIdModels = VirtuosoHandler.getAllWebIds(config.virtuoso)
@@ -48,15 +52,20 @@ class InitRunnerDatabus extends CommandLineRunner {
       "rdf" -> "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
       "xsd" -> "http://www.w3.org/2001/XMLSchema#"
     )
-    import collection.JavaConversions._
 
     aggregatedModel.clearNsPrefixMap()
+
+    import collection.JavaConversions._
     aggregatedModel.setNsPrefixes(prefixes)
 
     //write file
     val file = targetDir / "webids.ttl"
     val out = new FileOutputStream(file.toJava)
-    RDFDataMgr.write(out, aggregatedModel, Lang.TTL)
+
+    val gzippedOut: CompressorOutputStream = new CompressorStreamFactory()
+      .createCompressorOutputStream(CompressorStreamFactory.GZIP, out);
+
+    RDFDataMgr.write(gzippedOut, aggregatedModel, Lang.TTL)
   }
 }
 

@@ -13,8 +13,8 @@ case class Config() {
   var virtuoso: VosConfig = new VosConfig
   @BeanProperty
   var exhibit: ExhibitConfig = new ExhibitConfig
-  @BeanProperty
-  var databus: DatabusConfig = new DatabusConfig
+  //  @BeanProperty
+  //  var databus: DatabusConfig = new DatabusConfig
 }
 
 case class VosConfig() {
@@ -28,12 +28,12 @@ case class VosConfig() {
   var graph: String = _
 }
 
-case class ExhibitConfig(){
-  @BeanProperty
-  var file:String =_
-}
-
-case class DatabusConfig() {
+case class ExhibitConfig() {
   @BeanProperty
   var file: String = _
 }
+
+//case class DatabusConfig() {
+//  @BeanProperty
+//  var file: String = _
+//}

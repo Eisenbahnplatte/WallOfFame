@@ -23,17 +23,6 @@ object ModelToJSONConverter {
     outFile
   }
 
-  //  def appendToJSONFile(model: Model, jsonFile:File):File={
-  //    val json = toJSON(model)
-//
-//    val bw = jsonFile.newBufferedWriter(openOptions = OpenOptions.append)
-//    bw.write(json)
-//    bw.close()
-//
-//    jsonFile
-//  }
-
-
   def toJSON(models: Seq[(String, Model)]): String = {
     val items = new ListBuffer[ListBuffer[String]]
 

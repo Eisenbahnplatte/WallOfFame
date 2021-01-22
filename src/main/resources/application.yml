@@ -8,9 +8,9 @@ virtuoso:
   graph: "http://webids/"
 exhibit:
   file: "./tmp/webids.js"
-databus:
-  file: "./databus/uniformedWebIds/"
+#databus:
+#  file: "./databus/uniformedWebIds/"
 
-spring:
-  main:
-    web-application-type: none
+#spring:
+#  main:
+#    web-application-type: none

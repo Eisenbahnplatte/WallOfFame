@@ -5,7 +5,7 @@ import org.apache.jena.atlas.web.HttpException
 import java.io.{ByteArrayOutputStream, EOFException, FileOutputStream, IOException}
 import java.net.{ConnectException, SocketException}
 import org.apache.jena.rdf.model.ModelFactory
-import org.apache.jena.riot.{RiotException, RiotNotFoundException}
+import org.apache.jena.riot.{Lang, RDFDataMgr, RiotException, RiotNotFoundException}
 import org.dbpedia.walloffame.VosConfig
 import org.dbpedia.walloffame.uniform.WebIdUniformer
 import org.dbpedia.walloffame.virtuoso.VirtuosoHandler
@@ -24,20 +24,18 @@ object WebIdFetcher {
         |Accounts:""".stripMargin)
 
     val url = "https://databus.dbpedia.org/system/api/accounts"
-    val model = ModelFactory.createDefaultModel().read(url, "N-TRIPLE")
+    val model = RDFDataMgr.loadModel(url, Lang.NTRIPLES)
 
     val stmts = model.listStatements()
     while (stmts.hasNext) {
 
       val stmt = stmts.nextStatement()
       val account = stmt.getSubject.toString
-      println(account)
       val accountName = stmt.getObject.toString.replaceFirst("https://databus.dbpedia.org/", "")
+      println(account)
 
       try {
-        val uniformedModel = WebIdUniformer
-          .uniform(ModelFactory.createDefaultModel().read(account, "TURTLE"))
-
+        val uniformedModel = WebIdUniformer.uniform(RDFDataMgr.loadModel(account, Lang.TURTLE))
         VirtuosoHandler.insertModel(uniformedModel, virtuosoConfig, accountName)
       } catch {
         case httpException: HttpException => logger.error("httpException")
